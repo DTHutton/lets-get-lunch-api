@@ -1,0 +1,53 @@
+{
+  "name": "lets-get-lunch-api",
+  "version": "1.0.0",
+  "description": "API for learning Angular2",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -w src --exec \"babel-node src\"",
+    "build": "babel src -s -D -d built",
+    "prestart": "npm run -s build",
+    "api": "nodemon built/index.js",
+    "api-test": "npm run test && NODE_ENV=test nodemon built/index.js",
+    "test": "NODE_ENV=test mocha built/test --opts built/test/mocha.opts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.4.2",
+    "body-parser": "^1.15.2",
+    "cors": "^2.7.1",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "mongodb": "^2.2.8",
+    "mongoose": "^4.5.9"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.0",
+    "@types/bluebird": "^3.5.2",
+    "@types/body-parser": "^1.16.2",
+    "@types/chai-http": "0.0.30",
+    "@types/chai-spies": "0.0.0",
+    "@types/cors": "^2.8.1",
+    "@types/express": "^4.0.35",
+    "@types/jsonwebtoken": "^7.2.0",
+    "@types/mocha": "^2.2.40",
+    "@types/mongodb": "^2.1.41",
+    "@types/mongoose": "^4.7.9",
+    "babel-cli": "^6.11.4",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.13.2",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "chai-spies": "^0.7.1",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
+    "jshint": "^2.9.3",
+    "mocha": "^3.1.0",
+    "node-mocks-http": "^1.5.4",
+    "nodemon": "^1.10.2",
+    "typescript": "^2.2.2",
+    "typings": "^1.4.0"
+  }
+}

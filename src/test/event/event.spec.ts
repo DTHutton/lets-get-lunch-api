@@ -25,7 +25,8 @@ describe('Event', () => {
       let event = new Event({
         _creator: myUser._id,
         title: 'Test Title',
-        location: 'Atlanta, GA',
+        city: 'Atlanta',
+        state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
         endTime: '2017-04-01T20:00:00.000Z'
       });

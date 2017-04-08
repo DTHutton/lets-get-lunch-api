@@ -9,7 +9,8 @@ function create(req, res) {
     _creator: req.body._creator,
     title: req.body.title,
     description: req.body.description,
-    location: req.body.location,
+    city: req.body.city,
+    state: req.body.state,
     startTime: start,
     endTime: end,
     suggestLocations: req.body.suggestLocations

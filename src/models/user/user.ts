@@ -2,11 +2,13 @@ import * as mongoose from 'mongoose';
 import bcrypt = require('bcryptjs');
 import Promise = require('bluebird');
 import dietRestrictionsList from '../diet-restriction';
+import dietPreferencesList from '../diet-preference';
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: { type: String, minlength: 5, select: false },
-  dietRestrictions: [{ type: String, enum: dietRestrictionsList }]
+  dietRestrictions: [{ type: String, enum: dietRestrictionsList }],
+  dietPreferences: [{ type: String, enum: dietPreferencesList }]
 });
 
 UserSchema.pre('save', function(next) {

@@ -94,6 +94,18 @@ describe('User', () => {
           err.response.body.should.have.property('message');
         });
     });
+
+    it('should return an error for a user with invalid dietary preferences', () => {
+      let user = { username: 'foodie', password: 'password', dietPreferences: ['Acai Bowls'] };
+
+      return chai.request(server)
+        .post('/api/users')
+        .send(user)
+        .catch((err) => {
+          err.should.have.status(400);
+          err.response.body.should.have.property('message');
+        });
+    });
   });
 
   after(() => {

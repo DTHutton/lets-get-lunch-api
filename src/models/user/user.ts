@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 import bcrypt = require('bcryptjs');
 import Promise = require('bluebird');
+import dietRestrictionsList from '../diet-restriction';
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: { type: String, minlength: 5, select: false },
-  followingCount: { type: Number, default: 0 },
-  followerCount: { type: Number, default: 0 }
+  dietRestrictions: [{ type: String, enum: dietRestrictionsList }]
 });
 
 UserSchema.pre('save', function(next) {
@@ -27,5 +27,15 @@ UserSchema.methods.comparePassword = function(password) {
     });
   });
 };
+
+UserSchema.post('save', (err, doc, next) => {
+  if (err.name === 'ValidationError') {
+    next(new Error(err.message));
+  } else if (err.name === 'MongoError' && err.code === 11000) {
+    next(new Error('This user already exists!'));
+  } else {
+    next(err);
+  }
+});
 
 export default mongoose.model('User', UserSchema);

@@ -45,20 +45,8 @@ describe('User', () => {
       return user.save();
     });
 
-    it('should return an error with a password that is too short', () => {
-      let user = { username: 'testuser', password: 'abc' };
-
-      return chai.request(server)
-        .post('/api/users')
-        .send(user)
-        .catch((err) => {
-          err.should.have.status(500);
-          err.response.body.should.have.property('error');
-        });
-    });
-
     it('should return a user object with a valid username and password', () => {
-      let user = { username: 'testuser', password: 'password' };
+      let user = { username: 'testuser', password: 'password', dietRestrictions: ['Vegan'] };
 
       return chai.request(server)
         .post('/api/users')
@@ -66,7 +54,20 @@ describe('User', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.should.have.property('_id');
+          res.body.should.have.property('dietRestrictions');
           res.body.username.should.eql(user.username);
+        });
+    });
+
+    it('should return an error with a password that is too short', () => {
+      let user = { username: 'testuser', password: 'abc' };
+
+      return chai.request(server)
+        .post('/api/users')
+        .send(user)
+        .catch((err) => {
+          err.should.have.status(400);
+          err.response.body.should.have.property('message');
         });
     });
 
@@ -77,8 +78,20 @@ describe('User', () => {
         .post('/api/users')
         .send(user)
         .catch((err) => {
-          err.should.have.status(500);
-          err.response.body.should.have.property('error');
+          err.should.have.status(400);
+          err.response.body.should.have.property('message');
+        });
+    });
+
+    it('should return an error for a user with invalid dietary restrictions', () => {
+      let user = { username: 'foodie', password: 'password', dietRestrictions: ['Keto'] };
+
+      return chai.request(server)
+        .post('/api/users')
+        .send(user)
+        .catch((err) => {
+          err.should.have.status(400);
+          err.response.body.should.have.property('message');
         });
     });
   });

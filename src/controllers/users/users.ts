@@ -5,7 +5,7 @@ function get(req, res) {
     .exec()
     .then((user) => {
       if (!user) {
-        res.status(404).json({ 'resource': 'users', 'message': 'User does not exist!' });
+        res.status(404).json({ resource: 'users', message: 'User does not exist!' });
       } else {
         res.status(200).json(user);
       }
@@ -18,7 +18,8 @@ function get(req, res) {
 function create(req, res) {
   const user = new User({
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    dietRestrictions: req.body.dietRestrictions
   });
 
   user.save()
@@ -26,7 +27,13 @@ function create(req, res) {
       res.status(200).json(user);
     })
     .catch((err) => {
-      res.status(500).json({ error: 'User could not be created.' });
+      if (err.message === 'User validation failed') {
+        res.status(400).json({ message: 'User validation failed.' });
+      } else if (err.message === 'This user already exists!') {
+        res.status(400).json({ message: 'This user already exists!' });
+      } else {
+        res.status(500).json(err);
+      }
     });
 }
 

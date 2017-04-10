@@ -13,7 +13,8 @@ function create(req, res) {
     state: req.body.state,
     startTime: start,
     endTime: end,
-    suggestLocations: req.body.suggestLocations
+    suggestLocations: req.body.suggestLocations,
+    members: [req.body._creator]
   });
 
   event.save()

@@ -37,6 +37,7 @@ describe('Event', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body._creator.should.equal(myUser._id);
+          res.body.members.should.contain(myUser._id);
           eventId = res.body._id;
         });
     });

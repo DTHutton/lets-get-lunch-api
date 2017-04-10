@@ -1,7 +1,7 @@
 import server from '../index';
 import Promise = require('bluebird');
 
-const userCredentials = { username: 'johndoe', password: 'password' };
+const userCredentials = { username: 'johndoe', password: 'password', dietPreferences: ['BBQ', 'Japanese'] };
 
 const getUserAndToken = function() {
   return Promise.mapSeries([createDummyUser, loginUser], (func) => {

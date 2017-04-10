@@ -9,6 +9,7 @@ import MockZomato from '../mocks/zomato';
 
 const ZomatoCitiesResponse = MockZomato.ZomatoCitiesResponse;
 const ZomatoRestaurantsResponse = MockZomato.ZomatoRestaurantsResponse;
+const ZomatoCuisinesResponse = MockZomato.ZomatoCuisinesResponse;
 
 describe('Recommendation', () => {
   let user;
@@ -18,7 +19,8 @@ describe('Recommendation', () => {
   before(() => {
     zomatoSpy = sinon.stub(rp, 'get');
     zomatoSpy.onFirstCall().returns(ZomatoCitiesResponse);
-    zomatoSpy.onSecondCall().returns(ZomatoRestaurantsResponse);
+    zomatoSpy.onSecondCall().returns(ZomatoCuisinesResponse);
+    zomatoSpy.onThirdCall().returns(ZomatoRestaurantsResponse);
   });
 
   before(() => {
@@ -61,7 +63,7 @@ describe('Recommendation', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.should.have.property('restaurants');
-          sinon.assert.calledTwice(zomatoSpy);
+          sinon.assert.calledThrice(zomatoSpy);
           zomatoSpy.reset();
         });
     });

@@ -1,21 +1,39 @@
 import Event from '../../models/event';
+import User from '../../models/user';
 import * as rp from 'request-promise';
 import Promise = require('bluebird');
+
 let config = require('../../dev.json');
 
-let restaurantResults: any;
-
 function get(req, res) {
-  let myEvent: any;
+  let sourceEvent: any;
+  let eventCity: any;
+  let eventPreferences: any;
 
   getEvent(req.params.id).then((event) => {
-    myEvent = event;
+    sourceEvent = event;
     return createCityRequestOptions(event);
   })
   .then(getZomatoCitiesByName)
   .then((locations) => {
-    let city = getZomatoCityForEvent(locations, myEvent);
-    return createRestaurantsRequestOptions(city);
+    eventCity = getZomatoCityForEvent(locations, sourceEvent);
+    return getMembersInEvent(sourceEvent);
+  })
+  .then((members) => {
+    let preferences = parseMemberPreferences(members);
+    return eventPreferences = dedupePreferences(preferences);
+  })
+  .then((preferences) => {
+    let query = createCuisineRequestOptions(eventCity);
+    return getZomatoCuisines(query);
+  })
+  .then((cuisineList) => {
+    let filtered = filterCuisinesFromPreferences(cuisineList, eventPreferences);
+    let preferencesQueryString = generatePreferencesQueryString(filtered);
+    return preferencesQueryString;
+  })
+  .then((preferences) => {
+    return createRestaurantsRequestOptions(eventCity, preferences);
   })
   .then(getZomatoRestaurantSuggestions)
   .then((result) => {
@@ -24,6 +42,13 @@ function get(req, res) {
   .catch((err) => {
     res.status(500).json(err);
   });
+}
+
+function getMembersInEvent(event) {
+  return User
+    .find({})
+    .where('_id').in(event.members)
+    .exec();
 }
 
 function getEvent(event) {
@@ -43,18 +68,32 @@ function createCityRequestOptions(event) {
   };
 }
 
-function createRestaurantsRequestOptions (city) {
+function createRestaurantsRequestOptions (city, cuisines) {
   return {
     'uri': 'https://developers.zomato.com/api/v2.1/search',
     'qs': {
       'entity_id': city.id,
-      'entity_type': 'city'
+      'entity_type': 'city',
+      'cuisines': cuisines
     },
     'headers': {
       'user-key': config.zomato
     },
     'json': true
   };
+}
+
+function createCuisineRequestOptions (city) {
+  return {
+    'uri': 'https://developers.zomato.com/api/v2.1/cuisines',
+    'qs': {
+      'city_id': city.id,
+    },
+    'headers': {
+      'user-key': config.zomato
+    },
+    'json': true
+  }
 }
 
 function getZomatoCitiesByName(options) {
@@ -65,6 +104,10 @@ function getZomatoRestaurantSuggestions(options) {
   return rp.get(options);
 }
 
+function getZomatoCuisines(options) {
+  return rp.get(options);
+}
+
 function getZomatoCityForEvent(cities, event) {
   let result = cities.location_suggestions.filter((city) => {
     if (city.state_code === event.state && city.name.includes(event.city)) {
@@ -72,6 +115,39 @@ function getZomatoCityForEvent(cities, event) {
     }
   });
   return result[0];
+}
+
+function parseMemberPreferences(users) {
+  let preferences: any = [];
+  users.map((user) => {
+    user.dietPreferences.map((preference) => {
+      preferences.push(preference);
+    });
+  });
+  return preferences;
+}
+
+function dedupePreferences(preferences) {
+  return preferences.filter((elem, index, self) => {
+    return index == self.indexOf(elem);
+  });
+}
+
+function generatePreferencesQueryString(preferences) {
+  if (preferences.length) {
+    return preferences.reduce((prev, curr) => {
+      return prev.cuisine_id + ',' + curr.cuisine_id;
+    });
+  }
+  return '';
+}
+
+function filterCuisinesFromPreferences(zomatoCuisines, eventCuisines) {
+  return zomatoCuisines.cuisines.filter((elem) => {
+    if (eventCuisines.indexOf(elem.cuisine.cuisine_name) !== -1) {
+      return elem.cuisine;
+    }
+  });
 }
 
 export default { get };

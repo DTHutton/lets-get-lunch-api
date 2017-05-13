@@ -4,7 +4,8 @@ import server from '../../index';
 import Utils from '../utils';
 
 describe('Event', () => {
-  let myUser;
+  let eventCreator;
+  let subscribingUser;
   let eventId;
 
   before(() => {
@@ -16,14 +17,20 @@ describe('Event', () => {
 
   before(() => {
     return Utils.getUserAndToken().spread((user, session) => {
-      myUser = user;
+      eventCreator = user;
+    });
+  });
+
+  before(() => {
+    return Utils.createUserAndToken({ username: 'subscriber', password: 'foobar' }).spread((user) => {
+      subscribingUser = user;
     });
   });
 
   describe('POST Event', () => {
     it('should return an Event object with a valid payload', () => {
       let event = new Event({
-        _creator: myUser._id,
+        _creator: eventCreator._id,
         title: 'Test Title',
         city: 'Atlanta',
         state: 'GA',
@@ -36,8 +43,8 @@ describe('Event', () => {
         .send(event)
         .then((res) => {
           res.should.have.status(200);
-          res.body._creator.should.equal(myUser._id);
-          res.body.members.should.contain(myUser._id);
+          res.body._creator.should.equal(eventCreator._id);
+          res.body.members.should.contain(eventCreator._id);
           eventId = res.body._id;
         });
     });
@@ -73,6 +80,44 @@ describe('Event', () => {
           err.response.body.message.should.equal('This event does not exist!');
         });
     })
+  });
+
+  describe('PATCH Event', () => {
+    it('should return a 404 if an event cannot be found', () => {
+      let payload = { event: 12345 };
+
+      return chai.request(server)
+        .patch('/api/events')
+        .send(payload)
+        .catch((err) => {
+          err.should.have.status(404);
+          err.response.body.message.should.equal('This event does not exist!');
+        });
+    });
+
+    it('should return a 400 if the user is already subscribed to the event', () => {
+      let payload = { event: eventId, user: eventCreator._id };
+
+      return chai.request(server)
+        .patch('/api/events')
+        .send(payload)
+        .catch((err) => {
+          err.should.have.status(400);
+          err.response.body.message.should.equal('You are already a member of this event.');
+        });
+    });
+
+    it('should return a 200 if the user is successfully subscribed to the event', () => {
+      let payload = { event: eventId, user: subscribingUser._id };
+
+      return chai.request(server)
+        .patch('/api/events')
+        .send(payload)
+        .then((res) => {
+          res.should.have.status(200);
+          res.body.members.should.contain(subscribingUser._id);
+        });
+    });
   });
 
   after(() => {

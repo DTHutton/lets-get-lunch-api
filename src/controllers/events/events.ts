@@ -41,4 +41,23 @@ function get(req, res) {
     });
 }
 
-export default { get, create };
+function subscribe(req, res) {
+  Event.findOne({ _id: req.body.event })
+    .exec()
+    .then((event) => {
+      if (event.members.indexOf(req.body.user) === -1) {
+        event.members.push(req.body.user);
+        event.save()
+          .then((updatedEvent) => {
+            res.status(200).json(updatedEvent);
+          });
+      } else {
+        res.status(400).json({ message: 'You are already a member of this event.' });
+      }
+    })
+    .catch((err) => {
+      res.status(404).json({ message: 'This event does not exist!' });
+    })
+}
+
+export default { get, create, subscribe };

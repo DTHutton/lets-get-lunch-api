@@ -1,7 +1,6 @@
 import Event from '../../models/event';
 import User from '../../models/user';
 import * as rp from 'request-promise';
-import Promise = require('bluebird');
 
 let config = require('../../dev.json');
 
@@ -134,10 +133,17 @@ function dedupePreferences(preferences) {
 }
 
 function generatePreferencesQueryString(preferences) {
+  let list: string = '';
   if (preferences.length) {
-    return preferences.reduce((prev, curr) => {
-      return prev.cuisine_id + ',' + curr.cuisine_id;
+    preferences.map((preference) => {
+      if (list.length) {
+        list += ',' + preference.cuisine.cuisine_id;
+      } else {
+        list += preference.cuisine.cuisine_id;
+      }
+      return preference;
     });
+    return list;
   }
   return '';
 }

@@ -41,7 +41,7 @@ describe('Session', () => {
         .post('/api/sessions')
         .send(invalidPassword)
         .catch((err) => {
-          err.response.should.have.status(500);
+          err.response.should.have.status(401);
           err.response.body.should.have.property('error');
           err.response.body.error.should.eql('Incorrect password');
         });

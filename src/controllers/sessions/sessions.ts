@@ -9,14 +9,14 @@ function create(req, res) {
       user.comparePassword(req.body.password)
         .then(function(result) {
           let isValidPassword = result;
-          if (!isValidPassword) { return res.status(500).json({ error: 'Incorrect password' }); }
+          if (!isValidPassword) { return res.status(401).json({ error: 'Incorrect password' }); }
           jwt.sign({ username: req.body.username, id: user._id }, config.secret, { expiresIn: '24h' }, function(err, token) {
             if (err) { return res.status(500).json({ error: 'Could not create token' }); }
             return res.status(200).json({ token: token });
           });
         })
         .catch(function(result) {
-          // TODO handle rejected result
+          return res.status(500).json({ error: 'Something went wrong. Please try again.' });
         });
     });
 }

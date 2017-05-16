@@ -6,6 +6,7 @@ import Utils from '../utils';
 describe('Event', () => {
   let eventCreator;
   let subscribingUser;
+  let eventlessUser;
   let eventId;
 
   before(() => {
@@ -24,6 +25,12 @@ describe('Event', () => {
   before(() => {
     return Utils.createUserAndToken({ username: 'subscriber', password: 'foobar' }).spread((user) => {
       subscribingUser = user;
+    });
+  });
+
+  before(() => {
+    return Utils.createUserAndToken({ username: 'noevents', password: 'foobar' }).spread((user) => {
+      eventlessUser = user;
     });
   });
 
@@ -116,6 +123,37 @@ describe('Event', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.members.should.contain(subscribingUser._id);
+        });
+    });
+  });
+
+  describe('GET Events for User', () => {
+    it('should return a collection of events for a user who is subscribed to events', () => {
+      return chai.request(server)
+        .get('/api/events/user/' + eventCreator._id)
+        .then((res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('array');
+          res.body[0].members.should.contain(eventCreator._id);
+        });
+    });
+
+    it('should return a 404 for a user who isn\'t subscribed to events', () => {
+      return chai.request(server)
+        .get('/api/events/user/' + eventlessUser._id)
+        .catch((err) => {
+          err.should.have.status(404);
+          err.response.body.should.have.property('resource');
+          err.response.body.should.have.property('message');
+        });
+    });
+
+    it('should return a 404 for a user that doesn\'t exist', () => {
+      return chai.request(server)
+        .get('/api/events/user/' + 12345)
+        .catch((err) => {
+          err.should.have.status(404);
+          err.response.body.message.should.equal('This user does not exist!');
         });
     });
   });

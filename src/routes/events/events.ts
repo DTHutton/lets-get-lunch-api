@@ -10,4 +10,7 @@ router.route('/')
 router.route('/:id')
   .get(EventsCtrl.get);
 
+router.route('/user/:id')
+  .get(EventsCtrl.getEventsForUser);
+
 export default router;

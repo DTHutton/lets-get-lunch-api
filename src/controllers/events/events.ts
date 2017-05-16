@@ -60,4 +60,23 @@ function subscribe(req, res) {
     })
 }
 
-export default { get, create, subscribe };
+function getEventsForUser(req, res) {
+  Event.find({ members: req.params.id })
+    .exec()
+    .then((events) => {
+      if (!events.length) {
+        res.status(404).json({ resource: 'events', message: 'This user is not a member of any events.' });
+      } else {
+        res.status(200).json(events);
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(404).json({ message: 'This user does not exist!' });
+      } else {
+        res.status(500).json({ message: 'Something went wrong!' });
+      }
+    });
+}
+
+export default { get, create, subscribe, getEventsForUser };

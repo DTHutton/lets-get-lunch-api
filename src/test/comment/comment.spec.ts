@@ -6,7 +6,9 @@ import server from '../../index';
 
 describe('Comment', () => {
   let myUser;
-  let myEvent;
+  let populatedEvent;
+  let emptyEvent;
+  let myComment;
 
   before(() => {
     return Promise.all([
@@ -38,7 +40,27 @@ describe('Comment', () => {
       .then((res) => {
         res.should.have.status(200);
         res.body._creator.should.equal(myUser._id);
-        myEvent = res.body;
+        emptyEvent = res.body;
+      });
+  });
+
+  before(() => {
+    let event = new Event({
+      _creator: myUser._id,
+      title: 'Event with no Comments',
+      city: 'Atlanta',
+      state: 'GA',
+      startTime: '2017-04-01T19:00:00.000Z',
+      endTime: '2017-04-01T20:00:00.000Z'
+    });
+
+    return chai.request(server)
+      .post('/api/events')
+      .send(event)
+      .then((res) => {
+        res.should.have.status(200);
+        res.body._creator.should.equal(myUser._id);
+        populatedEvent = res.body;
       });
   });
 
@@ -46,8 +68,8 @@ describe('Comment', () => {
     it('should return a Comment object with a valid payload', () => {
       let comment = new Comment({
         content: 'First comment',
-        _event: myEvent._id,
-        _creator: myUser._id,
+        _event: populatedEvent._id,
+        _creator: myUser._id
       });
 
       return chai.request(server)
@@ -56,7 +78,8 @@ describe('Comment', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body._creator.should.equal(myUser._id);
-          res.body._event.should.equal(myEvent._id);
+          res.body._event.should.equal(populatedEvent._id);
+          myComment = res.body;
         });
     });
 
@@ -69,6 +92,28 @@ describe('Comment', () => {
         .catch((err) => {
           err.should.have.status(500);
           err.response.body.message.should.equal('Comment could not be created!');
+        });
+    });
+  });
+
+  describe('GET Comment', () => {
+    it('should return a collection of Comment objects for a given Event', () => {
+      return chai.request(server)
+        .get('/api/comments/event/' + populatedEvent._id)
+        .then((res) => {
+          res.should.have.status(200);
+          res.body[0]._event.should.equal(populatedEvent._id);
+          res.body.should.contain(myComment);
+        });
+    });
+
+    it('should return a 404 for an Event with no comments', () => {
+      return chai.request(server)
+        .get('/api/comments/event/' + emptyEvent._id)
+        .catch((err) => {
+          err.should.have.status(404);
+          err.response.body.should.have.property('resource');
+          err.response.body.should.have.property('message');
         });
     });
   });

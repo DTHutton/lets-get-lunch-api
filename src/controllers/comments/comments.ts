@@ -20,4 +20,18 @@ function create(req, res) {
     });
 }
 
-export default { create };
+function get(req, res) {
+  return Comment
+    .find({})
+    .where('_event').equals(req.params.id)
+    .exec()
+    .then((comments) => {
+      if (!comments.length) {
+        res.status(404).json({ resource: 'comments', message: 'No comments exist for this event.' });
+      } else {
+        res.status(200).json(comments);
+      }
+    });
+}
+
+export default { create, get };

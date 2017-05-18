@@ -21,7 +21,7 @@ function create(req, res) {
 }
 
 function get(req, res) {
-  return Comment
+  Comment
     .find({})
     .where('_event').equals(req.params.id)
     .exec()

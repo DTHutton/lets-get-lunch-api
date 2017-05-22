@@ -14,11 +14,11 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 app.use(cors());
-app.use(bodyParser.json({ limit: config.bodyLimit }));
+app.use(bodyParser.json({ limit: '100kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = Promise;
-mongoose.connect(config.testDB);
+mongoose.connect(process.env.MONGODB_URI || config.testDB);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

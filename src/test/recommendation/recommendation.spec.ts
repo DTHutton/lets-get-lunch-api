@@ -62,6 +62,7 @@ describe('Recommendation', () => {
     it('should return locations with a valid event', () => {
       return chai.request(server)
         .get('/api/recommendations/' + event._id)
+        .set('Authorization', user._token)
         .then((res) => {
           res.should.have.status(200);
           res.body.should.have.property('restaurants');
@@ -73,6 +74,7 @@ describe('Recommendation', () => {
     it('should return a 500 with an invalid event', () => {
       return chai.request(server)
         .get('/api/recommendations/' + 1)
+        .set('Authorization', user._token)
         .catch((err) => {
           err.response.should.have.status(500);
           sinon.assert.notCalled(zomatoSpy);

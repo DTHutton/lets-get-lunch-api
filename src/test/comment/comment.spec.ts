@@ -77,6 +77,7 @@ describe('Comment', () => {
 
       return chai.request(server)
         .post('/api/comments')
+        .set('Authorization', myUser._token)
         .send(comment)
         .then((res) => {
           res.should.have.status(200);
@@ -91,6 +92,7 @@ describe('Comment', () => {
 
       return chai.request(server)
         .post('/api/comments')
+        .set('Authorization', myUser._token)
         .send(comment)
         .catch((err) => {
           err.should.have.status(500);

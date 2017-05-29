@@ -97,6 +97,7 @@ describe('Event', () => {
 
       return chai.request(server)
         .patch('/api/events')
+        .set('Authorization', eventCreator._token)
         .send(payload)
         .catch((err) => {
           err.should.have.status(404);
@@ -109,6 +110,7 @@ describe('Event', () => {
 
       return chai.request(server)
         .patch('/api/events')
+        .set('Authorization', eventCreator._token)
         .send(payload)
         .catch((err) => {
           err.should.have.status(400);
@@ -121,6 +123,7 @@ describe('Event', () => {
 
       return chai.request(server)
         .patch('/api/events')
+        .set('Authorization', eventCreator._token)
         .send(payload)
         .then((res) => {
           res.should.have.status(200);

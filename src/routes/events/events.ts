@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/')
   .post(auth.isAuthenticated, EventsCtrl.create)
-  .patch(EventsCtrl.subscribe);
+  .patch(auth.isAuthenticated, EventsCtrl.subscribe);
 
 router.route('/:id')
   .get(EventsCtrl.get);

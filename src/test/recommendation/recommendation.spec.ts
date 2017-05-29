@@ -33,6 +33,7 @@ describe('Recommendation', () => {
   before(() => {
     return Utils.getUserAndToken().spread((newUser, session) => {
       user = newUser;
+      user._token = session.token;
     });
   });
 
@@ -48,6 +49,7 @@ describe('Recommendation', () => {
 
     return chai.request(server)
       .post('/api/events')
+      .set('Authorization', user._token)
       .send(newEvent)
       .then((res) => {
         res.should.have.status(200);

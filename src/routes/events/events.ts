@@ -1,10 +1,11 @@
 import * as express from 'express';
 import EventsCtrl from '../../controllers/events';
+import auth from '../../middleware/auth';
 
 const router = express.Router();
 
 router.route('/')
-  .post(EventsCtrl.create)
+  .post(auth.isAuthenticated, EventsCtrl.create)
   .patch(EventsCtrl.subscribe);
 
 router.route('/:id')

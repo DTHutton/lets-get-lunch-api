@@ -21,6 +21,7 @@ describe('Comment', () => {
   before(() => {
     return Utils.getUserAndToken().spread((user, session) => {
       myUser = user;
+      myUser._token = session.token;
     });
   });
 
@@ -36,6 +37,7 @@ describe('Comment', () => {
 
     return chai.request(server)
       .post('/api/events')
+      .set('Authorization', myUser._token)
       .send(event)
       .then((res) => {
         res.should.have.status(200);
@@ -56,6 +58,7 @@ describe('Comment', () => {
 
     return chai.request(server)
       .post('/api/events')
+      .set('Authorization', myUser._token)
       .send(event)
       .then((res) => {
         res.should.have.status(200);

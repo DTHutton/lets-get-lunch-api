@@ -19,6 +19,7 @@ describe('Event', () => {
   before(() => {
     return Utils.getUserAndToken().spread((user, session) => {
       eventCreator = user;
+      eventCreator._token = session.token;
     });
   });
 
@@ -47,6 +48,7 @@ describe('Event', () => {
 
       return chai.request(server)
         .post('/api/events')
+        .set('Authorization', eventCreator._token)
         .send(event)
         .then((res) => {
           res.should.have.status(200);
@@ -63,8 +65,8 @@ describe('Event', () => {
         .post('/api/events')
         .send(event)
         .catch((err) => {
-          err.should.have.status(500);
-          err.response.body.message.should.equal('Event could not be created!');
+          err.should.have.status(403);
+          err.response.body.message.should.equal('No token provided!');
         });
     });
   });

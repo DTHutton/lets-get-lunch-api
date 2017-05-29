@@ -21,7 +21,7 @@ const isAuthenticated = function(req, res, next) {
         }
       });
     } else {
-      return reject(res.status(403).json({ message: 'No token provided!' }));
+      return res.status(403).json({ message: 'No token provided!' });
     }
   });
 };

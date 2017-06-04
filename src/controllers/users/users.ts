@@ -16,26 +16,30 @@ function get(req, res) {
 }
 
 function create(req, res) {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-    dietRestrictions: req.body.dietRestrictions,
-    dietPreferences: req.body.dietPreferences
-  });
-
-  user.save()
-    .then((user) => {
-      res.status(200).json(user);
-    })
-    .catch((err) => {
-      if (err.message === 'User validation failed') {
-        res.status(400).json({ message: 'User validation failed.' });
-      } else if (err.message === 'This user already exists!') {
-        res.status(400).json({ message: 'This user already exists!' });
-      } else {
-        res.status(500).json(err);
-      }
+  if (!req.body.username || !req.body.password) {
+    res.status(400).json({ message: 'Please provide a username and password.' });
+  } else {
+    const user = new User({
+      username: req.body.username,
+      password: req.body.password,
+      dietRestrictions: req.body.dietRestrictions,
+      dietPreferences: req.body.dietPreferences
     });
+
+    user.save()
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((err) => {
+        if (err.message === 'User validation failed') {
+          res.status(400).json({ message: 'User validation failed.' });
+        } else if (err.message === 'This user already exists!') {
+          res.status(400).json({ message: 'This user already exists!' });
+        } else {
+          res.status(500).json(err);
+        }
+      });
+  }
 }
 
 export default { get, create };

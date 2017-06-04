@@ -59,6 +59,18 @@ describe('User', () => {
         });
     });
 
+    it('should return an error with an invalid user object', () => {
+      let user = { username: 'testuser' };
+
+      return chai.request(server)
+        .post('/api/users')
+        .send(user)
+        .catch((err) => {
+          err.should.have.status(400);
+          err.response.body.should.have.property('message');
+        });
+    });
+
     it('should return an error with a password that is too short', () => {
       let user = { username: 'testuser', password: 'abc' };
 

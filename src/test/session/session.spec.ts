@@ -32,7 +32,7 @@ describe('Session', () => {
         .catch((err) => {
           err.response.should.have.status(404);
           err.response.body.should.have.property('error');
-          err.response.body.error.should.eql('User could not be found');
+          err.response.body.error.should.eql('User could not be found.');
         });
     });
 
@@ -43,7 +43,7 @@ describe('Session', () => {
         .catch((err) => {
           err.response.should.have.status(401);
           err.response.body.should.have.property('error');
-          err.response.body.error.should.eql('Incorrect password');
+          err.response.body.error.should.eql('Incorrect password.');
         });
     });
   });

@@ -46,7 +46,7 @@ describe('User', () => {
     });
 
     it('should return a user object with a valid username and password', () => {
-      let user = { username: 'testuser', password: 'password', dietRestrictions: ['Vegan'] };
+      let user = { username: 'testuser', password: 'password', dietPreferences: [] };
 
       return chai.request(server)
         .post('/api/users')
@@ -54,7 +54,7 @@ describe('User', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.should.have.property('_id');
-          res.body.should.have.property('dietRestrictions');
+          res.body.should.have.property('dietPreferences');
           res.body.username.should.eql(user.username);
         });
     });
@@ -96,7 +96,7 @@ describe('User', () => {
     });
 
     it('should return an error for a user with invalid dietary restrictions', () => {
-      let user = { username: 'foodie', password: 'password', dietRestrictions: ['Keto'] };
+      let user = { username: 'foodie', password: 'password', dietPreferences: [] };
 
       return chai.request(server)
         .post('/api/users')
@@ -108,7 +108,7 @@ describe('User', () => {
     });
 
     it('should return an error for a user with invalid dietary preferences', () => {
-      let user = { username: 'foodie', password: 'password', dietPreferences: ['Acai Bowls'] };
+      let user = { username: 'foodie', password: 'password', dietPreferences: [] };
 
       return chai.request(server)
         .post('/api/users')

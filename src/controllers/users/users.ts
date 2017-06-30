@@ -22,7 +22,6 @@ function create(req, res) {
     const user = new User({
       username: req.body.username,
       password: req.body.password,
-      dietRestrictions: req.body.dietRestrictions,
       dietPreferences: req.body.dietPreferences
     });
 

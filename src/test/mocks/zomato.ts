@@ -19,6 +19,144 @@ const ZomatoCitiesResponse = {
   "has_total": 0
 };
 
+const ZomatoNoCitiesResponse = {
+  "location_suggestions": [
+    {
+      "id": 1264,
+      "name": 'Madison, WI',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 116,
+      "state_name": 'Wisconsin',
+      "state_code": 'WI'
+    },
+    {
+      "id": 4577,
+      "name": 'Madison, FL',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 77,
+      "state_name": 'Florida',
+      "state_code": 'FL'
+    },
+    {
+      "id": 5397,
+      "name": 'Madison, IN',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 83,
+      "state_name": 'Indiana',
+      "state_code": 'IN'
+    },
+    {
+      "id": 6512,
+      "name": 'Madison, MN',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 91,
+      "state_name": 'Minnesota',
+      "state_code": 'MN'
+    },
+    {
+      "id": 6819,
+      "name": 'Madison, MO',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 92,
+      "state_name": 'Missouri',
+      "state_code": 'MO'
+    },
+    {
+      "id": 3846,
+      "name": 'Madison, NJ',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 100,
+      "state_name": 'New Jersey',
+      "state_code": 'NJ'
+    },
+    {
+      "id": 8800,
+      "name": 'Madison, SD',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 109,
+      "state_name": 'South Dakota',
+      "state_code": 'SD'
+    },
+    {
+      "id": 5828,
+      "name": 'Madisonville, KY',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 85,
+      "state_name": 'Kentucky',
+      "state_code": 'KY'
+    },
+    {
+      "id": 9009,
+      "name": 'Madisonville, TN',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 110,
+      "state_name": 'Tennessee',
+      "state_code": 'TN'
+    },
+    {
+      "id": 9463,
+      "name": 'Madisonville, TX',
+      "country_id": 216,
+      "country_name": 'United States',
+      "should_experiment_with": 0,
+      "discovery_enabled": 0,
+      "has_new_ad_format": 0,
+      "is_state": 0,
+      "state_id": 111,
+      "state_name": 'Texas',
+      "state_code": 'TX'
+    }
+  ],
+  "status": 'success',
+  "has_more": 0,
+  "has_total": 0
+};
+
 const ZomatoRestaurantsResponse = {
   "results_found": 11172,
   "results_start": 0,
@@ -112,4 +250,4 @@ const ZomatoCuisinesResponse = {
   ]
 };
 
-export default { ZomatoCitiesResponse, ZomatoRestaurantsResponse, ZomatoCuisinesResponse };
+export default { ZomatoCitiesResponse, ZomatoNoCitiesResponse, ZomatoRestaurantsResponse, ZomatoCuisinesResponse };

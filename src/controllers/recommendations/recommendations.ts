@@ -1,6 +1,7 @@
 import Event from '../../models/event';
 import User from '../../models/user';
 import * as rp from 'request-promise';
+import Promise = require('bluebird');
 
 let config: any;
 
@@ -22,6 +23,9 @@ function get(req, res) {
   .then(getZomatoCitiesByName)
   .then((locations) => {
     eventCity = getZomatoCityForEvent(locations, sourceEvent);
+    if (!eventCity) {
+      return Promise.reject({ message: 'No recommendations for this location exist.' });
+    }
     return getMembersInEvent(sourceEvent);
   })
   .then((members) => {
@@ -45,6 +49,7 @@ function get(req, res) {
     res.status(200).json(result);
   })
   .catch((err) => {
+    // TODO Update status code?
     res.status(500).json(err);
   });
 }

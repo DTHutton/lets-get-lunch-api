@@ -102,19 +102,20 @@ describe('Recommendation', () => {
         .get('/api/recommendations/' + noZomatoCityEvent._id)
         .set('Authorization', user._token)
         .catch((err) => {
-          err.response.should.have.status(500);
+          err.response.should.have.status(404);
           err.response.body.message.should.equal('No recommendations for this location exist.');
           sinon.assert.calledOnce(zomatoSpy);
           zomatoSpy.reset();
         });
     });
 
-    it('should return a 500 with an invalid event', () => {
+    it('should return a 404 with an invalid event', () => {
       return chai.request(server)
         .get('/api/recommendations/' + 1)
         .set('Authorization', user._token)
         .catch((err) => {
-          err.response.should.have.status(500);
+          err.response.should.have.status(404);
+          err.response.body.message.should.equal('This event does not exist!');
           sinon.assert.notCalled(zomatoSpy);
         });
     });

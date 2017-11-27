@@ -49,8 +49,13 @@ function get(req, res) {
     res.status(200).json(result);
   })
   .catch((err) => {
-    // TODO Update status code?
-    res.status(500).json(err);
+    if (err.name === 'CastError') {
+      res.status(404).json({ message: 'This event does not exist!' });
+    } else if (err.message) {
+      res.status(404).json(err);
+    } else {
+      res.status(500).json(err);
+    }
   });
 }
 

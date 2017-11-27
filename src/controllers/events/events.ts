@@ -28,6 +28,7 @@ function create(req, res) {
 
 function get(req, res) {
   Event.findOne({ _id: req.params.id })
+    .populate('members')
     .exec()
     .then((event) => {
       res.status(200).json(event);

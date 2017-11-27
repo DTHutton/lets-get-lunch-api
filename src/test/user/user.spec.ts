@@ -21,7 +21,7 @@ describe('User', () => {
         .get('/api/users/' + myUser.username)
         .then((res) => {
           res.should.have.status(200);
-          res.body.username.should.eql(myUser.username);
+          res.body.username.should.equal(myUser.username);
         });
     });
 
@@ -32,6 +32,7 @@ describe('User', () => {
           err.should.have.status(404);
           err.response.body.should.have.property('resource');
           err.response.body.should.have.property('message');
+          err.response.body.message.should.equal('User does not exist!');
         });
     });
   });
@@ -46,7 +47,7 @@ describe('User', () => {
     });
 
     it('should return a user object with a valid username and password', () => {
-      let user = { username: 'testuser', password: 'password', dietPreferences: [] };
+      let user = { username: 'testuser', password: 'password', dietPreferences: ['BBQ'] };
 
       return chai.request(server)
         .post('/api/users')
@@ -55,7 +56,7 @@ describe('User', () => {
           res.should.have.status(200);
           res.body.should.have.property('_id');
           res.body.should.have.property('dietPreferences');
-          res.body.username.should.eql(user.username);
+          res.body.username.should.equal(user.username);
         });
     });
 
@@ -68,6 +69,7 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
+          err.response.body.message.should.equal('Please provide a username and password.');
         });
     });
 
@@ -80,6 +82,7 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
+          err.response.body.message.should.equal('Your password must be at least 5 characters long.');
         });
     });
 
@@ -92,23 +95,12 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
-        });
-    });
-
-    it('should return an error for a user with invalid dietary restrictions', () => {
-      let user = { username: 'foodie', password: 'password', dietPreferences: [] };
-
-      return chai.request(server)
-        .post('/api/users')
-        .send(user)
-        .catch((err) => {
-          err.should.have.status(400);
-          err.response.body.should.have.property('message');
+          err.response.body.message.should.equal('This user already exists!');
         });
     });
 
     it('should return an error for a user with invalid dietary preferences', () => {
-      let user = { username: 'foodie', password: 'password', dietPreferences: [] };
+      let user = { username: 'foodie', password: 'password', dietPreferences: ['BBQ', 'Gluten-Free'] };
 
       return chai.request(server)
         .post('/api/users')
@@ -116,6 +108,7 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
+          err.response.body.message.should.equal('Diet preferences are invalid!');
         });
     });
   });

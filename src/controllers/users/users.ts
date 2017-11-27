@@ -31,9 +31,11 @@ function create(req, res) {
       })
       .catch((err) => {
         if (err.message === 'User validation failed') {
-          res.status(400).json({ message: 'User validation failed.' });
+          res.status(400).json({ message: 'Your password must be at least 5 characters long.' });
         } else if (err.message === 'This user already exists!') {
           res.status(400).json({ message: 'This user already exists!' });
+        } else if (err.message === 'Diet preferences are invalid!') {
+          res.status(400).json({ message: 'Diet preferences are invalid!' });
         } else {
           res.status(500).json(err);
         }

@@ -29,13 +29,23 @@ UserSchema.methods.comparePassword = function(password) {
 };
 
 UserSchema.post('save', (err, doc, next) => {
-  if (err.name === 'ValidationError') {
+  var dietaryError = dietaryErrorExists(err);
+
+  if (err.name === 'ValidationError' && !dietaryError) {
     next(new Error(err.message));
   } else if (err.name === 'MongoError' && err.code === 11000) {
     next(new Error('This user already exists!'));
+  } else if (dietaryError) {
+    next(new Error('Diet preferences are invalid!'));
   } else {
     next(err);
   }
 });
+
+function dietaryErrorExists(err) {
+  for (var prop in err.errors) {
+    return prop.includes('dietPreferences') ? true : false;
+  }
+}
 
 export default mongoose.model('User', UserSchema);

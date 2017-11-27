@@ -63,10 +63,11 @@ describe('Event', () => {
 
       return chai.request(server)
         .post('/api/events')
+        .set('Authorization', eventCreator._token)
         .send(event)
         .catch((err) => {
-          err.should.have.status(403);
-          err.response.body.message.should.equal('No token provided!');
+          err.should.have.status(500);
+          err.response.body.message.should.equal('Event could not be created!');
         });
     });
   });

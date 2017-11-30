@@ -24,6 +24,7 @@ function get(req, res) {
   Comment
     .find({})
     .where('_event').equals(req.params.id)
+    .populate('_creator')
     .exec()
     .then((comments) => {
       if (!comments.length) {

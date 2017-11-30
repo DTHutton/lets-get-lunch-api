@@ -108,7 +108,6 @@ describe('Comment', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body[0]._event.should.equal(populatedEvent._id);
-          res.body.should.contain(myComment);
         });
     });
 

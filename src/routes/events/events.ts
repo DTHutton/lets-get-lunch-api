@@ -9,7 +9,8 @@ router.route('/')
   .patch(auth.isAuthenticated, EventsCtrl.subscribe);
 
 router.route('/:id')
-  .get(EventsCtrl.get);
+  .get(EventsCtrl.get)
+  .patch(auth.isAuthenticated, EventsCtrl.update);
 
 router.route('/user/:id')
   .get(EventsCtrl.getEventsForUser);

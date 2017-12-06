@@ -61,6 +61,25 @@ function subscribe(req, res) {
     })
 }
 
+function update(req, res) {
+  Event.findOne({ _id: req.params.id })
+    .exec()
+    .then((event) => {
+      event.title = req.body.title;
+      event.city = req.body.city;
+      event.state = req.body.state;
+      event.startTime = req.body.startTime;
+      event.endTime = req.body.endTime;
+      event.save()
+        .then((updatedEvent) => {
+          res.status(200).json(updatedEvent);
+        })
+        .catch((err) => {
+          res.status(500).json({ message: 'Event could not be updated!' });
+        });
+    });
+}
+
 function getEventsForUser(req, res) {
   Event.find({ members: req.params.id })
     .exec()
@@ -80,4 +99,4 @@ function getEventsForUser(req, res) {
     });
 }
 
-export default { get, create, subscribe, getEventsForUser };
+export default { get, create, subscribe, update, getEventsForUser };

@@ -92,7 +92,7 @@ describe('Event', () => {
     })
   });
 
-  describe('PATCH Event', () => {
+  describe('PATCH Subscribe to an Event', () => {
     it('should return a 404 if an event cannot be found', () => {
       let payload = { event: 12345 };
 
@@ -129,6 +129,41 @@ describe('Event', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.members.should.contain(subscribingUser._id);
+        });
+    });
+  });
+
+  describe('PATCH Update an Event', () => {
+    it('should return a 200 if the event is succesfully updated', () => {
+      let payload = {
+        _creator: eventCreator._id,
+        title: 'Updated Test Title',
+        city: 'Atlanta',
+        state: 'GA',
+        startTime: '2017-04-01T19:00:00.000Z',
+        endTime: '2017-04-01T20:00:00.000Z'
+      };
+
+      return chai.request(server)
+        .patch('/api/events/' + eventId)
+        .set('Authorization', eventCreator._token)
+        .send(payload)
+        .then((res) => {
+          res.should.have.status(200);
+          res.body.title.should.equal('Updated Test Title');
+        });
+    });
+
+    it('should return a 500 if the event cannot be updated', () => {
+      let payload = {};
+
+      return chai.request(server)
+        .patch('/api/events/' + eventId)
+        .set('Authorization', eventCreator._token)
+        .send(payload)
+        .catch((err) => {
+          err.should.have.status(500);
+          err.response.body.message.should.equal('Event could not be updated!');
         });
     });
   });

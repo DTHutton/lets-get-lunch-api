@@ -40,6 +40,7 @@ describe('Event', () => {
       let event = new Event({
         _creator: eventCreator._id,
         title: 'Test Title',
+        description: 'Description',
         city: 'Atlanta',
         state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
@@ -137,7 +138,9 @@ describe('Event', () => {
     it('should return a 200 if the event is succesfully updated', () => {
       let payload = {
         _creator: eventCreator._id,
+        _id: eventId,
         title: 'Updated Test Title',
+        description: 'Description',
         city: 'Atlanta',
         state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
@@ -145,7 +148,7 @@ describe('Event', () => {
       };
 
       return chai.request(server)
-        .patch('/api/events/' + eventId)
+        .patch('/api/events/' + payload._id)
         .set('Authorization', eventCreator._token)
         .send(payload)
         .then((res) => {
@@ -155,15 +158,28 @@ describe('Event', () => {
     });
 
     it('should return a 500 if the event cannot be updated', () => {
-      let payload = {};
+      let payload = { _id: eventId };
 
       return chai.request(server)
-        .patch('/api/events/' + eventId)
+        .patch('/api/events/' + payload._id)
         .set('Authorization', eventCreator._token)
         .send(payload)
         .catch((err) => {
           err.should.have.status(500);
           err.response.body.message.should.equal('Event could not be updated!');
+        });
+    });
+
+    it('should return a 500 if the event cannot be found', () => {
+      let payload = { _id: 1234 };
+
+      return chai.request(server)
+        .patch('/api/events/' + payload._id)
+        .set('Authorization', eventCreator._token)
+        .send(payload)
+        .catch((err) => {
+          err.should.have.status(500);
+          err.response.body.message.should.equal('Event does not exist!');
         });
     });
   });

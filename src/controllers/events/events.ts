@@ -66,6 +66,7 @@ function update(req, res) {
     .exec()
     .then((event) => {
       event.title = req.body.title;
+      event.description = req.body.description;
       event.city = req.body.city;
       event.state = req.body.state;
       event.startTime = req.body.startTime;
@@ -77,6 +78,9 @@ function update(req, res) {
         .catch((err) => {
           res.status(500).json({ message: 'Event could not be updated!' });
         });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: 'Event does not exist!' });
     });
 }
 

@@ -44,7 +44,8 @@ describe('Event', () => {
         city: 'Atlanta',
         state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
-        endTime: '2017-04-01T20:00:00.000Z'
+        endTime: '2017-04-01T20:00:00.000Z',
+        suggestLocations: false
       });
 
       return chai.request(server)
@@ -144,7 +145,8 @@ describe('Event', () => {
         city: 'Atlanta',
         state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
-        endTime: '2017-04-01T20:00:00.000Z'
+        endTime: '2017-04-01T20:00:00.000Z',
+        suggestLocations: false
       };
 
       return chai.request(server)

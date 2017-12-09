@@ -31,8 +31,8 @@ describe('Session', () => {
         .send(invalidUser)
         .catch((err) => {
           err.response.should.have.status(404);
-          err.response.body.should.have.property('error');
-          err.response.body.error.should.eql('User could not be found.');
+          err.response.body.should.have.property('message');
+          err.response.body.message.should.eql('User could not be found.');
         });
     });
 
@@ -42,8 +42,8 @@ describe('Session', () => {
         .send(invalidPassword)
         .catch((err) => {
           err.response.should.have.status(401);
-          err.response.body.should.have.property('error');
-          err.response.body.error.should.eql('Incorrect password.');
+          err.response.body.should.have.property('message');
+          err.response.body.message.should.eql('Incorrect password.');
         });
     });
   });

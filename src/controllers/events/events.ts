@@ -1,18 +1,14 @@
 import Event from '../../models/event';
-import * as moment from 'moment';
 
 function create(req, res) {
-  const start = moment(req.body.startTime, moment.ISO_8601);
-  const end = moment(req.body.endTime, moment.ISO_8601);
-
   const event = new Event({
     _creator: req.body._creator,
     title: req.body.title,
     description: req.body.description,
     city: req.body.city,
     state: req.body.state,
-    startTime: start,
-    endTime: end,
+    startTime: req.body.startTime,
+    endTime: req.body.endTime,
     suggestLocations: req.body.suggestLocations,
     members: [req.body._creator]
   });

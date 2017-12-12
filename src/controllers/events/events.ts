@@ -38,23 +38,23 @@ function get(req, res) {
     });
 }
 
-function subscribe(req, res) {
-  Event.findOne({ _id: req.body.event })
+function getEventsForUser(req, res) {
+  Event.find({ members: req.params.id })
     .exec()
-    .then((event) => {
-      if (event.members.indexOf(req.body.user) === -1) {
-        event.members.push(req.body.user);
-        event.save()
-          .then((updatedEvent) => {
-            res.status(200).json(updatedEvent);
-          });
+    .then((events) => {
+      if (!events.length) {
+        res.status(404).json({ resource: 'events', message: 'This user is not a member of any events.' });
       } else {
-        res.status(400).json({ message: 'You are already a member of this event.' });
+        res.status(200).json(events);
       }
     })
     .catch((err) => {
-      res.status(404).json({ message: 'This event does not exist!' });
-    })
+      if (err.name === 'CastError') {
+        res.status(404).json({ message: 'This user does not exist!' });
+      } else {
+        res.status(500).json({ message: 'Something went wrong!' });
+      }
+    });
 }
 
 function update(req, res) {
@@ -80,23 +80,40 @@ function update(req, res) {
     });
 }
 
-function getEventsForUser(req, res) {
-  Event.find({ members: req.params.id })
+function subscribe(req, res) {
+  Event.findOne({ _id: req.params.id })
     .exec()
-    .then((events) => {
-      if (!events.length) {
-        res.status(404).json({ resource: 'events', message: 'This user is not a member of any events.' });
+    .then((event) => {
+      if (event._creator == req.body.user) {
+        res.status(400).json({ message: 'You cannot unsubscribe from your own event.' });
+      } else if (event.members.indexOf(req.body.user) === -1) {
+        event.members.push(req.body.user);
+        event.save()
+          .then((result) => {
+            Event.populate(result, { path: 'members' }).then((updatedEvent) => {
+              res.status(200).json(updatedEvent);
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({ message: 'Something went wrong. Try again.' });
+          });
       } else {
-        res.status(200).json(events);
+        let index = event.members.indexOf(req.body.user);
+        event.members.splice(index, 1);
+        event.save()
+          .then((result) => {
+            Event.populate(result, { path: 'members' }).then((updatedEvent) => {
+              res.status(200).json(updatedEvent);
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({ message: 'Something went wrong. Try again.' });
+          });
       }
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(404).json({ message: 'This user does not exist!' });
-      } else {
-        res.status(500).json({ message: 'Something went wrong!' });
-      }
-    });
+      res.status(404).json({ message: 'This event does not exist!' });
+    })
 }
 
-export default { get, create, subscribe, update, getEventsForUser };
+export default { create, get, getEventsForUser, update, subscribe };

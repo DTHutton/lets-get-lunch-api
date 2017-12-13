@@ -57,6 +57,17 @@ function getEventsForUser(req, res) {
     });
 }
 
+function all(req, res) {
+  Event.find({})
+    .exec()
+    .then((events) => {
+      res.status(200).json(events);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+}
+
 function update(req, res) {
   Event.findOne({ _id: req.params.id })
     .exec()
@@ -116,4 +127,4 @@ function subscribe(req, res) {
     })
 }
 
-export default { create, get, getEventsForUser, update, subscribe };
+export default { create, get, getEventsForUser, all, update, subscribe };

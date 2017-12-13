@@ -5,6 +5,7 @@ import auth from '../../middleware/auth';
 const router = express.Router();
 
 router.route('/')
+  .get(EventsCtrl.all)
   .post(auth.isAuthenticated, EventsCtrl.create)
 
 router.route('/:id')

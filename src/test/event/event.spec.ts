@@ -125,6 +125,17 @@ describe('Event', () => {
     });
   });
 
+  describe('GET all events', () => {
+    it('should return a collection of all events', () => {
+      return chai.request(server)
+        .get('/api/events')
+        .then((res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('array');
+        });
+    });
+  });
+
   describe('PATCH Update an Event', () => {
     it('should return a 200 if the event is succesfully updated', () => {
       let payload = {

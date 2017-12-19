@@ -18,7 +18,7 @@ function create(req, res) {
         .then(function(result) {
           let isValidPassword = result;
           if (!isValidPassword) { return res.status(401).json({ message: 'Incorrect password.' }); }
-          jwt.sign({ username: req.body.username, id: user._id }, SECRET, { expiresIn: '2h' }, function(err, token) {
+          jwt.sign({ username: req.body.username, _id: user._id }, SECRET, { expiresIn: '2h' }, function(err, token) {
             if (err) { return res.status(500).json({ message: 'Could not create token' }); }
             return res.status(200).json({ token: token });
           });

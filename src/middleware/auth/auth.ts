@@ -4,8 +4,11 @@ import Promise = require('bluebird');
 let config: any;
 
 if (process.env.NODE_ENV === 'test') {
-  config = require('../../config.json');
+  config = require('../../test-config.json');
+} else if (process.env.NODE_ENV === 'development') {
+  config = require('../../dev-config.json');
 }
+
 
 let SECRET = process.env.SESSION_SECRET || config.secret;
 

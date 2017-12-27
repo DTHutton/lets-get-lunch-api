@@ -9,7 +9,7 @@ gulp.task('default', ['move-dev-config', 'move-test-config'], function() {
 });
 
 gulp.task('move-dev-config', function() {
-  return gulp.src(['./src/config.json'])
+  return gulp.src(['./src/test-config.json', './src/dev-config.json'])
     .pipe(gulp.dest('built'));
 });
 

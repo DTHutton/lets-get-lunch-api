@@ -1,3 +1,4 @@
 node_modules/
-src/config.json
+src/dev-config.json
+src/test-config.json
 built/

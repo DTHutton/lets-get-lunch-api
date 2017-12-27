@@ -9,7 +9,9 @@ import api from './routes';
 let config: any;
 
 if (process.env.NODE_ENV === 'test') {
-  config = require('./config.json');
+  config = require('./test-config.json');
+} else if (process.env.NODE_ENV === 'development') {
+  config = require('./dev-config.json');
 }
 
 let app = express();
@@ -19,7 +21,7 @@ app.use(bodyParser.json({ limit: '100kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGODB_URI || config.testDB);
+mongoose.connect(process.env.MONGODB_URI || config.db);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');

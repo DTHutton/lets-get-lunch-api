@@ -7,9 +7,8 @@
     "postinstall": "gulp",
     "start": "nodemon built/index.js",
     "api-dev": "NODE_ENV=development nodemon built/index.js",
-    "api-test": "npm run db:seed && NODE_ENV=test nodemon built/index.js",
-    "test": "NODE_ENV=test mocha built/test --opts built/test/mocha.opts",
-    "db:seed": "NODE_ENV=test node built/test/db-seed.js"
+    "api-test": "NODE_ENV=test nodemon built/index.js",
+    "test": "NODE_ENV=test mocha built/test --opts built/test/mocha.opts"
   },
   "engines": {
     "node": "7.6.0",

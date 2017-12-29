@@ -4,6 +4,7 @@ import Sessions from './sessions';
 import Events from './events';
 import Comments from './comments';
 import Recommendations from './recommendations';
+import Test from './test';
 
 const router = express.Router();
 
@@ -17,5 +18,9 @@ router.use('/sessions', Sessions);
 router.use('/events', Events);
 router.use('/comments', Comments);
 router.use('/recommendations', Recommendations);
+
+if (process.env.NODE_ENV === 'test') {
+  router.use('/test', Test);
+}
 
 export default router;

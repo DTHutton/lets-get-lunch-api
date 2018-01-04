@@ -78,6 +78,7 @@ function update(req, res) {
       event.state = req.body.state;
       event.startTime = req.body.startTime;
       event.endTime = req.body.endTime;
+      event.suggestLocations = req.body.suggestLocations;
       event.save()
         .then((updatedEvent) => {
           res.status(200).json(updatedEvent);

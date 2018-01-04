@@ -147,7 +147,7 @@ describe('Event', () => {
         state: 'GA',
         startTime: '2017-04-01T19:00:00.000Z',
         endTime: '2017-04-01T20:00:00.000Z',
-        suggestLocations: false
+        suggestLocations: true
       };
 
       return chai.request(server)
@@ -157,6 +157,7 @@ describe('Event', () => {
         .then((res) => {
           res.should.have.status(200);
           res.body.title.should.equal('Updated Test Title');
+          res.body.suggestLocations.should.equal(true);
         });
     });
 

@@ -43,7 +43,7 @@ function getEventsForUser(req, res) {
     .exec()
     .then((events) => {
       if (!events.length) {
-        res.status(404).json({ resource: 'events', message: 'This user is not a member of any events.' });
+        res.status(204).json({ resource: 'events', message: 'This user is not a member of any events.' });
       } else {
         res.status(200).json(events);
       }

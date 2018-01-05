@@ -101,9 +101,9 @@ describe('Recommendation', () => {
       return chai.request(server)
         .get('/api/recommendations/' + noZomatoCityEvent._id)
         .set('Authorization', user._token)
-        .catch((err) => {
-          err.response.should.have.status(404);
-          err.response.body.message.should.equal('No recommendations for this location exist.');
+        .then((res) => {
+          res.should.have.status(204);
+          res.body.should.be.empty;
           sinon.assert.calledOnce(zomatoSpy);
           zomatoSpy.reset();
         });

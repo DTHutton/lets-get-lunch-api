@@ -109,7 +109,7 @@ describe('Event', () => {
       return chai.request(server)
         .get('/api/events/user/' + eventlessUser._id)
         .catch((err) => {
-          err.should.have.status(404);
+          err.should.have.status(204);
           err.response.body.should.have.property('resource');
           err.response.body.should.have.property('message');
         });

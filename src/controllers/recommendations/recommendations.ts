@@ -55,7 +55,7 @@ function get(req, res) {
     if (err.name === 'CastError') {
       res.status(404).json({ message: 'This event does not exist!' });
     } else if (err.message) {
-      res.status(404).json(err);
+      res.status(204).json({});
     } else {
       res.status(500).json(err);
     }

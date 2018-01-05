@@ -115,7 +115,7 @@ describe('Comment', () => {
       return chai.request(server)
         .get('/api/comments/event/' + emptyEvent._id)
         .catch((err) => {
-          err.should.have.status(404);
+          err.should.have.status(204);
           err.response.body.should.have.property('resource');
           err.response.body.should.have.property('message');
         });

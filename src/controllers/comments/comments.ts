@@ -28,7 +28,7 @@ function get(req, res) {
     .exec()
     .then((comments) => {
       if (!comments.length) {
-        res.status(404).json({ resource: 'comments', message: 'No comments exist for this event.' });
+        res.status(204).json({ resource: 'comments', message: 'No comments exist for this event.' });
       } else {
         res.status(200).json(comments);
       }

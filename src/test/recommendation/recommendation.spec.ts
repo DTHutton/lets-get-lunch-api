@@ -30,7 +30,7 @@ describe('Recommendation', () => {
   });
 
   before(() => {
-    return Utils.getUserAndToken().spread((newUser, session) => {
+    return Utils.getUserAndToken().spread((newUser, session: any) => {
       user = newUser;
       user._token = session.token;
     });

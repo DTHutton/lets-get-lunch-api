@@ -71,7 +71,7 @@ function all(req, res) {
 function update(req, res) {
   Event.findOne({ _id: req.params.id })
     .exec()
-    .then((event) => {
+    .then((event: any) => {
       event.title = req.body.title;
       event.description = req.body.description;
       event.city = req.body.city;
@@ -95,7 +95,7 @@ function update(req, res) {
 function subscribe(req, res) {
   Event.findOne({ _id: req.params.id })
     .exec()
-    .then((event) => {
+    .then((event: any) => {
       if (event._creator == req.body.user) {
         res.status(400).json({ message: 'You cannot unsubscribe from your own event.' });
       } else if (event.members.indexOf(req.body.user) === -1) {

@@ -13,7 +13,7 @@ describe('Auth middleware', () => {
   });
 
   before(() => {
-    return Utils.getUserAndToken().spread((user, session) => {
+    return Utils.getUserAndToken().spread((user, session: any) => {
       token = session.token;
     });
   });

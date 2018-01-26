@@ -11,10 +11,9 @@ if (process.env.NODE_ENV === 'test') {
 
 let SECRET = process.env.SESSION_SECRET || config.secret;
 
-// TODO - Update 404 error to be message
 function create(req, res) {
   User.findOne({ username: req.body.username }).select('username password')
-    .then(function(user) {
+    .then(function(user: any) {
       if (!user) { return res.status(404).json({ message: 'User could not be found.' }); }
       user.comparePassword(req.body.password)
         .then(function(result) {

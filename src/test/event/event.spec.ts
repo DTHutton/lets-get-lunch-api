@@ -17,7 +17,7 @@ describe('Event', () => {
   });
 
   before(() => {
-    return Utils.getUserAndToken().spread((user, session) => {
+    return Utils.getUserAndToken().spread((user, session: any) => {
       eventCreator = user;
       eventCreator._token = session.token;
     });

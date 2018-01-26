@@ -19,7 +19,7 @@ describe('Comment', () => {
   });
 
   before(() => {
-    return Utils.getUserAndToken().spread((user, session) => {
+    return Utils.getUserAndToken().spread((user, session: any) => {
       myUser = user;
       myUser._token = session.token;
     });

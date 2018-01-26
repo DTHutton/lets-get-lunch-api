@@ -31,7 +31,7 @@ function get(req, res) {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).json({ message: 'This event does not exist!' });
+        res.status(404).json({ message: 'This event does not exist.' });
       } else {
         res.status(404).json(err);
       }
@@ -50,7 +50,7 @@ function getEventsForUser(req, res) {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).json({ message: 'This user does not exist!' });
+        res.status(404).json({ message: 'This user does not exist.' });
       } else {
         res.status(500).json({ message: 'Something went wrong!' });
       }

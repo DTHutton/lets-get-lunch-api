@@ -89,7 +89,7 @@ describe('Event', () => {
         .get('/api/events/' + 12345)
         .catch((err) => {
           err.should.have.status(404);
-          err.response.body.message.should.equal('This event does not exist!');
+          err.response.body.message.should.equal('This event does not exist.');
         });
     })
   });
@@ -120,7 +120,7 @@ describe('Event', () => {
         .get('/api/events/user/' + 12345)
         .catch((err) => {
           err.should.have.status(404);
-          err.response.body.message.should.equal('This user does not exist!');
+          err.response.body.message.should.equal('This user does not exist.');
         });
     });
   });

@@ -2,8 +2,6 @@ import Comment from '../../models/comment';
 import * as moment from 'moment';
 
 function create(req, res) {
-  const now = moment().toISOString();
-
   const comment = new Comment({
     content: req.body.content,
     createdAt: moment.now(),

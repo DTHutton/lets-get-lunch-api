@@ -95,7 +95,7 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
-          err.response.body.message.should.equal('This user already exists!');
+          err.response.body.message.should.equal('This user already exists.');
         });
     });
 
@@ -108,7 +108,7 @@ describe('User', () => {
         .catch((err) => {
           err.should.have.status(400);
           err.response.body.should.have.property('message');
-          err.response.body.message.should.equal('Diet preferences are invalid!');
+          err.response.body.message.should.equal('Diet preferences are invalid.');
         });
     });
   });

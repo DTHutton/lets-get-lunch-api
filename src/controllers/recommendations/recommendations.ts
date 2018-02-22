@@ -57,7 +57,7 @@ function get(req, res) {
     } else if (err.message) {
       res.status(204).json({});
     } else {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'Something went wrong!' });
     }
   });
 }

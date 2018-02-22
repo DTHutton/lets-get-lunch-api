@@ -30,6 +30,9 @@ function get(req, res) {
       } else {
         res.status(200).json(comments);
       }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: 'Something went wrong!' });
     });
 }
 

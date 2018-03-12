@@ -20,8 +20,17 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '100kb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const options = {
+  useMongoClient: true,
+  autoIndex: false,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 500,
+  poolSize: 10,
+  bufferMaxEntries: 0
+};
+const DATABASE = process.env.MONGODB_URI || config.db;
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGODB_URI || config.db);
+mongoose.connect(DATABASE, options);
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
@@ -31,6 +40,6 @@ app.use('/api', api);
 app.set('port', process.env.PORT || config.port);
 http.createServer(app).listen(app.get('port'));
 console.log(`Ready on port ${app.get('port')}`);
-console.log(`Ready on DB ${mongoose.connection.name}`);
+console.log(`Ready on DB ${DATABASE}`);
 
 export default app;

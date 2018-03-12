@@ -32,7 +32,7 @@ UserSchema.post('save', (err, doc, next) => {
   var dietaryError = dietaryErrorExists(err);
 
   if (err.name === 'ValidationError' && !dietaryError) {
-    next(new Error(err.message));
+    next(new Error('User validation failed'));
   } else if (err.name === 'MongoError' && err.code === 11000) {
     next(new Error('This user already exists!'));
   } else if (dietaryError) {
@@ -44,7 +44,10 @@ UserSchema.post('save', (err, doc, next) => {
 
 function dietaryErrorExists(err) {
   for (var prop in err.errors) {
-    return prop.includes('dietPreferences') ? true : false;
+    if (prop.indexOf('dietPreferences') >= 0) {
+      return true;
+    }
+    return false;
   }
 }
 

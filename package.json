@@ -28,6 +28,7 @@
     "moment": "^2.18.1",
     "mongodb": "^2.2.8",
     "mongoose": "^4.5.9",
+    "mongoose-unique-validator": "^2.0.1",
     "nodemon": "^1.10.2",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",

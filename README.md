@@ -24,3 +24,7 @@ Structure:
 - `npm run api-dev`: Run API using default DB `api-starter`
 - `npm run api-test`: Clear DB and then run API on test DB `api-starter-test`. Use for E2E FE tests that require a fresh DB.
 - `npm run test`: Run API tests using test DB `api-starter-test`
+
+
+### Local Testing
+- Remove "exclude" from `tsconfig.json` for local testing to build test files to `built`.

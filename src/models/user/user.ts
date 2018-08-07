@@ -2,12 +2,14 @@ import * as mongoose from 'mongoose';
 import bcrypt = require('bcryptjs');
 import Promise = require('bluebird');
 import dietPreferencesList from '../diet-preference';
+var uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: { type: String, minlength: 5, select: false },
   dietPreferences: [{ type: String, enum: dietPreferencesList }]
 });
+UserSchema.plugin(uniqueValidator);
 
 UserSchema.pre('save', function(next) {
   if (!this.isModified('password')) { return next(); }
@@ -28,12 +30,12 @@ UserSchema.methods.comparePassword = function(password) {
   });
 };
 
-UserSchema.post('save', (err, doc, next) => {
+UserSchema.post('save', (err: any, doc, next) => {
   var dietaryError = dietaryErrorExists(err);
 
-  if (err.name === 'ValidationError' && !dietaryError) {
+  if (err.name === 'ValidationError' && !dietaryError && !err.errors.username) {
     next(new Error('User validation failed'));
-  } else if (err.name === 'MongoError' && err.code === 11000) {
+  } else if (err.name === 'ValidationError' && err.errors.username && err.errors.username.kind === 'unique') {
     next(new Error('This user already exists!'));
   } else if (dietaryError) {
     next(new Error('Diet preferences are invalid!'));

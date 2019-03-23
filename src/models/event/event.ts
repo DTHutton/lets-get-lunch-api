@@ -2,6 +2,18 @@ import * as mongoose from 'mongoose';
 import * as moment from 'moment';
 const Schema = mongoose.Schema;
 
+interface Event extends mongoose.Document {
+  _creator: mongoose.Schema.Types.ObjectId,
+  title: String,
+  description: String,
+  members: [mongoose.Schema.Types.ObjectId],
+  city: String,
+  state: String,
+  startTime: Date | Number,
+  endTime: Date | Number,
+  suggestLocations: Boolean
+}
+
 const EventSchema = new mongoose.Schema({
   _creator: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   title: { type: String, required: true },
@@ -22,4 +34,4 @@ EventSchema.pre('save', function(next) {
   }
 });
 
-export default mongoose.model('Event', EventSchema);
+export default mongoose.model<Event>('Event', EventSchema);

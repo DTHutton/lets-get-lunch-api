@@ -12,7 +12,7 @@ const EventSchema = new mongoose.Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   suggestLocations: { type: Boolean, default: false }
-});
+}, { usePushEach: true });
 
 EventSchema.pre('save', function(next) {
   if (moment(this.endTime).isBefore(moment(this.startTime))) {

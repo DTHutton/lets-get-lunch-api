@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: { type: String, minlength: 5, select: false },
   dietPreferences: [{ type: String, enum: dietPreferencesList }]
-});
+}, { usePushEach: true });
 UserSchema.plugin(uniqueValidator);
 
 UserSchema.pre('save', function(next) {
